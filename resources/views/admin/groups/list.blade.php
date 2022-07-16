@@ -14,7 +14,7 @@
 
       <div class="col-sm-12 col-md-6">
 
-            <a class="btn btn-primary" href="{{route('admin.users.add')}}">Thêm mới</a>
+            <a class="btn btn-primary" href="{{route('admin.groups.add')}}">Thêm mới</a>
       </div>
       <div class="col-sm-12 col-md-6">
 
@@ -36,8 +36,8 @@
                   <tr>
                         <th>STT</th>
                         <th>Tên</th>
-                        <th>Email</th>
-                        <th>Nhóm</th>
+                        <th>Phân quyền</th>
+                        <th>user_login_name</th>
                         <th class="text-center">Action</th>
                   </tr>
             </thead>
@@ -49,15 +49,17 @@
                               {{ $key +1 }}
                         </td>
                         <td>{{$item ->name}}</td>
-                        <td>{{$item ->email}}</td>
-                        <td>{{$item ->group ->name}}</td>
+                        <td><a class="btn btn-primary" href="">
+                                    phân quyền
+                              </a></td>
+                        <td>{{!empty($item->postBy ->name) ? $item->postBy ->name  : ''}}</td>
                         <td class="table-action d-flex justify-content-between">
-                              <a href="{{route('admin.users.edit',$item)}}" class="action-icon"> <i
+                              <a href="{{route('admin.groups.edit',$item)}}" class="action-icon"> <i
                                           class="fa-solid fa-pencil"></i></a>
                               |
-                              @if (Auth::user()->id !== $item ->id)
+
                               <form class="float-right m-0" method="post"
-                                    action="{{route('admin.users.delete',$item)}}">
+                                    action="{{route('admin.groups.delete',$item)}}">
                                     @method('delete')
                                     @csrf
                                     <div class="form-row">
@@ -65,7 +67,7 @@
                                           <button> <i class="fa fa-trash-alt"></i></button>
                                     </div>
                               </form>
-                              @endif
+
 
                         </td>
                   </tr>
