@@ -28,6 +28,10 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
         Route::get('/edit/{group}', [GroupsController::class, 'edit'])->name('edit');
         Route::post('/edit/{group}', [GroupsController::class, 'postEdit']);
         Route::delete('/delete/{group}', [GroupsController::class, 'delete'])->name('delete');
+        // permission
+
+        Route::get('/permission/{group}', [GroupsController::class, 'permission'])->name('permission');
+        Route::post('/permission/{group}', [GroupsController::class, 'postPermission']);
     });
 
     // post
@@ -48,7 +52,6 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
         Route::post('/edit/{user}', [UsersController::class, 'postEdit']);
 
         // Route::delete('/delete/{user}', [UsersController::class, 'delete'])->name('delete');
-
 
         Route::delete('/delete/{user}', [UsersController::class, 'delete'])->name('delete');
     });

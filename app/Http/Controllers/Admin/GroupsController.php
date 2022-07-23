@@ -9,6 +9,7 @@ use App\Http\Requests\PostAddRequest;
 use App\Http\Requests\PostEditRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Group;
+use App\Models\Modules;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
@@ -54,5 +55,50 @@ class GroupsController extends Controller
             return redirect(route('admin.groups.index'))->with('message', 'Xóa thành công');
         }
         return redirect(route('admin.groups.index'))->with('message', 'Trong nhóm vẫn còn ' . $userCount . 'nguời dùng');
+    }
+    public function permission(Group $group)
+    {
+
+        $modules = Modules::all();
+
+        $roleListArr = [
+            'view' => 'Xem',
+            'add' => 'Thêm',
+            'edit' => 'Sửa',
+            'delete' => 'Xóa',
+        ];
+        $roleJson = $group->permission;
+        if (!empty($roleJson)) {
+            $roleArr = json_decode($roleJson, true);
+        } else {
+            $roleArr = [];
+        }
+        // $roleArr = $roleArr['user'];
+        // dd($roleArr);
+        // foreach ($modules as $module) {
+        //     echo $module->name . '<br/>';
+        // }
+        // dd();
+
+        return view('admin.groups.permission', compact(
+            'group',
+            'modules',
+            'roleListArr',
+            'roleArr',
+        ));
+    }
+
+    public function postPermission(Group $group, Request $request)
+    {
+        if (!empty($request->role)) {
+            $roleArr = $request->role;
+        } else {
+            $roleArr = null;
+        }
+
+        $roleJson = json_encode($roleArr);
+        $group->permission = $roleJson;
+        $group->save();
+        return redirect(route('admin.groups.index'))->with('message', 'Phân quyền thành công');
     }
 }
